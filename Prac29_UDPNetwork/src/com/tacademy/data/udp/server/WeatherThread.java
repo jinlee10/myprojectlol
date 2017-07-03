@@ -9,14 +9,14 @@ import java.net.UnknownHostException;
 
 import com.tacademy.data.udp.client.UDPClient;
 
-public class ServerThread extends Thread{
+public class WeatherThread extends Thread{
 	
 	boolean onAir = false;
 	UDPServer server;
 	UDPClient packet;
 	DatagramSocket s;
 	
-	public ServerThread(UDPServer server){
+	public WeatherThread(UDPServer server){
 		this.server = server;
 		try {
 			s = new DatagramSocket();//클라이언트가 받을거라서 12345쓰면안된댜

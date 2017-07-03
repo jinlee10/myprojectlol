@@ -12,7 +12,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
-public class UDPServer {
+public class WeatherServer {
 
 	JFrame f; 
 	JButton btnStart, btnStop;
@@ -39,15 +39,12 @@ public class UDPServer {
 	}
 	
 	void stopServer(){
-		thrd.stopServer();
 	}
 	
 	public void startServer(){
-		thrd = new ServerThread(this); //여서 상대방접속, 데이타 패킷을 받아온다
-		thrd.start();
 	}
 	
-	public UDPServer(){
+	public WeatherServer(){
 		
 		setGUI();	
 		//작업이 병행되어야하겠다..=======> 쓰레드만들자
@@ -57,7 +54,7 @@ public class UDPServer {
 
 	void setGUI(){
 		//ui만들어서 시작과 죠료 하기
-		f = new JFrame("여기는 title란. UDP Server");
+		f = new JFrame("MultiCast Server");
 		f.setBounds(new Rectangle(200, 200, 400, 400));
 
 		JPanel nPanel = new JPanel(new GridLayout(1, 2));
@@ -87,6 +84,6 @@ public class UDPServer {
 
 
 	public static void main(String[] args){
-		new UDPServer();
+		new WeatherServer();
 	}
 }
