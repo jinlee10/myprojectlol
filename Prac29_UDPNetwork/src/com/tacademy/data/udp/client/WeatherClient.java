@@ -3,12 +3,12 @@ package com.tacademy.data.udp.client;
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.Rectangle;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.net.MulticastSocket;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 
@@ -34,7 +34,9 @@ public class WeatherClient {
 				break;
 			}
 		}
+	byte[] data;
 	};
+	
 	
 	public WeatherClient(){
 		setGUI();
@@ -50,17 +52,38 @@ public class WeatherClient {
 		taResult.append(msg + "\n");
 	}
 	
+	boolean onAir = false;
 	///이너쓰레드만들장
 	class ReceiverThread extends Thread{
 		public void run(){	//오버라이딩:부모가갖고있는메소드재정의
-			receiveData();	//run에있으므로쓰레드안에서동작하는거지?
+			onAir = true;
+			
+			MulticastSocket ms = null;
+			InetAddress addrs = null;
+			try{
+				ms = new MulticastSocket();
+				addrs = InetAddress.getByAddress("23.0.0.1");
+				ms.joinGroup(addrs);
+			}catch(IOException e){
+				ms.leaveGroup(addrs);
+			}
+			try{
+				
+				
+			}catch(IOException e){
+				packet = new DatagramPacket(data, data.leghW);
+				while(onAr);
+			}
+			
 		}
+		
+	
+			
 	}
 	
 	void receiveData(){
 		//요서부터 ㄹㅇ udp하자!
 		
-		//udp는 서버소켓 소켓 없어!
 		//UDP의 핵심클래서 1) 접속을 관리하는 DatagramSocket,
 		//					2) DatagramPacket
 		DatagramSocket s = null;	//얘도 걍 s라고함

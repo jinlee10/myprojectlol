@@ -17,7 +17,8 @@ public class WeatherServer {
 	JFrame f; 
 	JButton btnStart, btnStop;
 	JTextArea taResult;
-	ServerThread thrd;
+//	ServerThread thrd;
+	WeatherThread wtrd;
 
 	ActionListener al = new ActionListener() {
 		@Override
@@ -42,6 +43,8 @@ public class WeatherServer {
 	}
 	
 	public void startServer(){
+		wtrd = new WeatherThread(this);
+		wtrd.start();
 	}
 	
 	public WeatherServer(){

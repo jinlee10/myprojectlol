@@ -7,16 +7,16 @@ import java.net.InetAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 
-import com.tacademy.data.udp.client.UDPClient;
+import com.tacademy.data.udp.client.WeatherClient;
 
 public class WeatherThread extends Thread{
 	
 	boolean onAir = false;
-	UDPServer server;
-	UDPClient packet;
+	WeatherServer server;
+	WeatherClient packet;
 	DatagramSocket s;
 	
-	public WeatherThread(UDPServer server){
+	public WeatherThread(WeatherServer server){
 		this.server = server;
 		try {
 			s = new DatagramSocket();//클라이언트가 받을거라서 12345쓰면안된댜
@@ -45,28 +45,29 @@ public class WeatherThread extends Thread{
 		}
 		
 		onAir = true;
-		int port;
 		byte[] data = new byte[256];		//DatagramPacket 초기화를위한것
 		DatagramPacket packet = new DatagramPacket(data, data.length);
 		//InetAddress address = null;
 		InetAddress address = null;
 		try {
-			address = InetAddress.getByName("192.168.205.255"); //BIP <==TCP/IP론 못해!(얘는 bip랑 interaction 못하죠?)
-		} catch (UnknownHostException e1) {  //내아이피로 안쏘죠? bIP로쏘죠?
+			//D클래스 영역의 ip를 사용한다!!! (첫째자리가 224~239까지)
+			address = InetAddress.getByName("230.0.0.1"); //채널로 쏘죠?
+		} catch (UnknownHostException e1) {  
 			server.appendLog("아이피 get 에러: " + e1);
 		} 
-		String fortune = "";
+		String weather = "";
 		
 		// ==== 3교시BIP ====
 		
 		while(onAir){
 			try {
-				fortune = TodaysFortune.getFortune();
-				byte[] fByte = fortune.getBytes();
+				weather = WeatherUtil.getWeather();
+				byte[] fByte = weather.getBytes();
 				
+				//보낼 패킷 만들죠? 글자가 data가들어가죠?
 				packet = new DatagramPacket(fByte, fByte.length, address, 12345);
 				s.send(packet);
-				server.appendLog("sent well!");
+				server.appendLog(String.format("sent data: %s", new String(fByte)));
 				
 				Thread.sleep(500);
 			} catch (IOException e) {
